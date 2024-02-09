@@ -759,6 +759,9 @@ public class AST {
 				}
 				break;
 			case "asigBool":
+				if (der.izq != null && der.izq.raiz.equals("asigBool")){
+					der.izq.gc();
+				}
 				right = der.raiz; //raiz AST siguiente
 				left = izq.raiz; // identificador
 				if (!(right.equals("true") || right.equals("false"))){ // condicion

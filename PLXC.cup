@@ -179,6 +179,7 @@ listaBool	::= IDENT:i									{: RESULT = new AST("boolIdent", null, new AST(i, 
 			|  IDENT:i COMA listaBool:l					{: RESULT = new AST("boolIdent", l, new AST(i, null, null)); :}
 			|  IDENT:i ASIG TRUE:t						{: RESULT = new AST("asigBool", new AST(i, null, null), new AST(t, null, null)); :}
 			|  IDENT:i ASIG cond:c						{: RESULT = new AST("asigBool", new AST(i, null, null), c); :}
+			|  IDENT:i ASIG TRUE:t COMA listaBool:l		{: RESULT = new AST("asigBool", new AST(i, null, null), new AST(t, l, null)); :}
 			;
 
 arrayIni 	::= exp:e COMA arrayIni:a					{: RESULT = new AST("arrayIni", e, a); :}
