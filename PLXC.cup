@@ -119,6 +119,7 @@ exp			::=	NUM:n									{: RESULT = new AST("num", new AST(n, null, null), null 
 			|   STRING expString:e						{: RESULT = new AST("string", e, null); :}
 			|   CASTCHAR exp:e 							{: RESULT = new AST("castChar", e, null); :}
 			|   CASTINT exp:e 							{: RESULT = new AST("castInt", e, null); :}
+			|   CASTINT AP boolexp:b CP					{: RESULT = new AST("castInt", b, null); :}
 			|   CASTFLOAT exp:e 						{: RESULT = new AST("castFloat", e, null); :}
 			|	exp:e1 MAS exp:e2						{: RESULT = new AST("mas", e1, e2); :}
 			|	exp:e1 MENOS exp:e2						{: RESULT = new AST("menos", e1, e2); :}

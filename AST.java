@@ -171,11 +171,21 @@ public class AST {
 				break;	
 			case "castInt":
 				aux = izq.gc();
-				aux = ("(int) " + aux);
-				v = Generador.nuevaVariable();
-				PLXC.out.println("\t$" + v + " = " + aux + ";");
-				res = "$" + v;
-				TablaSimbolos.insertar(res, TablaSimbolos.Tipo.FLOAT);
+				if(izq.raiz.equals("or") || izq.raiz.equals("and")){
+					aux = "$" + Generador.nuevaVariable();
+					PLXC.out.println(izq.v + ":");
+					PLXC.out.println("\t" + aux + " = 1;");
+					PLXC.out.println(izq.f + ":");
+					res = aux;
+
+				}else{
+					aux = ("(int) " + aux);
+					v = Generador.nuevaVariable();
+					PLXC.out.println("\t$" + v + " = " + aux + ";");
+					res = "$" + v;
+				}
+				
+				TablaSimbolos.insertar(res, TablaSimbolos.Tipo.INT);
 				break;
 			case "castFloat":
 				aux = izq.gc();

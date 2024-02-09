@@ -1,7 +1,6 @@
-boolean b = true;
-if (b) {
-   print(1);
-} else {
-   print(2);
-}
-print(3);
+boolean p;
+int x;
+x = (int) (p || !p);
+print(x);
+x = (int) (p && !p);
+print(x);

@@ -1,10 +1,24 @@
-	b = 1;
-	if ( 1 == b) goto L0;
-	goto L1;
-L0:
-	print 1;
-	goto L2;
+   if (1 == p) goto L0;
+   goto L1;
 L1:
-	print 2;
+   if (1 == p) goto L2;
+   goto L3;
+L0:
+   goto L3;
+L3:
+   $t0 = 1;
 L2:
-	print 3;
+   x = $t0;
+   print x;
+   if (1 == p) goto L4;
+   goto L5;
+L4:
+   if (1 == p) goto L6;
+   goto L7;
+L5:
+   goto L6;
+L7:
+   $t1 = 1;
+L6:
+   x = $t1;
+   print x;
