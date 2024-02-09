@@ -1,7 +1,5 @@
-int x=12;
-int y=15;
-boolean p = x<15 && y<20; 
-boolean q = x<15 && y<15;
+boolean p=true;
+boolean q = false;
 if (p && q)  
    print(1);
 if (p || q)  
