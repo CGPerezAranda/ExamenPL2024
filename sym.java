@@ -30,10 +30,12 @@ public class sym {
   public static final int ASIG = 20;
   public static final int TRUE = 49;
   public static final int error = 1;
+  public static final int DIMPLICA = 51;
   public static final int COMA = 31;
   public static final int CADENA = 48;
   public static final int DIF = 13;
   public static final int MENOS = 17;
+  public static final int EXISTS = 52;
   public static final int MENOR = 22;
   public static final int IDENT = 44;
   public static final int MENOSUNARIO = 50;
@@ -108,7 +110,9 @@ public class sym {
   "ASCII",
   "CADENA",
   "TRUE",
-  "MENOSUNARIO"
+  "MENOSUNARIO",
+  "DIMPLICA",
+  "EXISTS"
   };
 }
 

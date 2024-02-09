@@ -855,6 +855,45 @@ public class AST {
 				s = et2;
 				res = s;
 				break;
+			case "existsInt":
+				left = izq.raiz; //identificador
+				String from2, to2;
+				from2 = izq.izq.gc(); //desde
+				to2 = izq.der.gc(); //hasta
+				TablaSimbolos.insertar(left, TablaSimbolos.Tipo.INT);
+				PLXC.out.println("\t" + left + " = " + from2 + ";"); // x = 1
+				et = Generador.nuevaEtiqueta(); // etiqueta inicial
+				PLXC.out.println(et + ":"); // L0
+				et1 = Generador.nuevaEtiqueta(); // fin bucle
+				// if (5 < x) goto L1; fin
+				PLXC.out.println("\tif (" + to2 + " < " + left + ") goto " + et1 + ";");
+				der.gc(); // expresion
+				// L2
+				PLXC.out.println(der.f + ":");
+				// x = x + 1; goto L0;
+				PLXC.out.println("\t" + left + " = " + left + " + 1;");
+				PLXC.out.println("\tgoto " + et + ";");
+				v = der.v;
+				f = et1;
+				break;
+			case "existsIntStep":
+				left = izq.raiz; //identificador
+				from1 = izq.izq.gc(); //desde
+				to1 = izq.der.gc(); //hasta
+				TablaSimbolos.insertar(left, TablaSimbolos.Tipo.INT);
+				PLXC.out.println("\t" + left + " = " + from1 + ";");
+				et = Generador.nuevaEtiqueta();
+				PLXC.out.println(et + ":");
+				et1 = Generador.nuevaEtiqueta();
+				PLXC.out.println("\tif (" + to1 + " < " + left + ") goto " + et1 + ";");
+				der.der.gc();
+				PLXC.out.println(der.der.f + ":");
+				step = der.izq.gc(); //step
+				PLXC.out.println("\t" + left + " = " + left + " + " + step + ";");
+				PLXC.out.println("\tgoto " + et + ";");
+				v = der.der.v;
+				f = et1;
+				break;
 		}
 		
 		return res;

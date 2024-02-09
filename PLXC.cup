@@ -21,18 +21,21 @@ terminal MAYORIGUAL, NOT, ALL, CLL, AND, OR, COMA, CASTCHAR, CASTINT, CASTFLOAT,
 terminal INT, CHAR, FLOAT, STRING, BOOLEAN;
 terminal String IDENT, NUM, REAL, ASCII, CADENA, TRUE;
 terminal MENOSUNARIO;
+terminal DIMPLICA;
+terminal EXISTS;
 
 /* NOT TERMINALES */
 non terminal ini;
-non terminal AST listaSent, forAllExp, sent, exp, boolexp, cond, elseSent, expFor, listaEnteros, listaChar, listaReales, listaBool, arrayIni, pArrayIni, expString;
+non terminal AST listaSent, forAllExp, sent, exp, boolexp, cond, elseSent, expFor, listaEnteros, listaChar, listaReales, listaBool, arrayIni, pArrayIni, expString, existExp;
 
 /* PRECEDENCIAS */
 
 precedence right IMPLICA;
 precedence right ASIG;
 precedence left COMA;
-precedence nonassoc FORALL;
+precedence nonassoc FORALL, EXISTS;
 precedence right FROM, TO, STEP;
+precedence right DIMPLICA;
 precedence left OR, AND;
 precedence right NOT; // Ensure NOT has higher precedence than AND
 precedence left IGUAL, MAYOR, MENOR, MAYORIGUAL, MENORIGUAL, DIF;
@@ -63,6 +66,7 @@ sent		::=		PRINT AP exp:e CP PYC			{: RESULT = new AST("print", e, null); :}
 			|	exp:e PYC							{: RESULT = e; :}
 			|	ALL listaSent:e CLL					{: RESULT = e; :}
 			|   IF AP boolexp:b CP elseSent:e 	 	{: RESULT = new AST("if", b, e); :}
+			|   IF AP existExp:f CP elseSent:e		{: RESULT = new AST("if", f, e); :}
 			|	IF AP cond:c CP elseSent:e			{: RESULT = new AST("if", c, e); :}
 			|   IF AP forAllExp:f CP elseSent:e		{: RESULT = new AST("if", f, e); :}
 			|	DO sent:s WHILE AP cond:c CP PYC	{: RESULT = new AST("doWhile",c,s); :}
@@ -84,7 +88,20 @@ boolexp     ::= exp:e                             	{: RESULT = new AST("bool", e
             |   IDENT:i AND boolexp:b               {: RESULT = new AST("and", new AST("bool", new AST(i,null, null),null), b); :}
             |   AP boolexp:b CP                     {: RESULT = b; :}
 			|   TRUE:t1 IMPLICA TRUE:t2				{: RESULT = new AST("implica", new AST(t1, null, null), new AST(t2, null, null)); :}          
+			|   boolexp:c1 DIMPLICA boolexp:c2                {: RESULT = new AST("and", new AST("or", new AST("not", c1, null), c2),
+																			 new AST("or", new AST("not", c2, null), c1)); :}
+                         		
 			;
+
+existExp	::= EXISTS IDENT:i COMA boolexp:b		{: RESULT = new AST("exists", new AST(i, null, null), b); :}
+             |	EXISTS IDENT:i FROM exp:e1 TO exp:e2
+            					COMA cond:c 					{: RESULT = new AST("existsInt", new AST(i, e1, e2), c); :} 	%prec FORALL
+            |   EXISTS IDENT:i FROM exp:e1 TO exp:e2
+            					COMA boolexp:b 					{: RESULT = new AST("existsInt", new AST(i, e1, e2), b); :}		%prec FORALL
+            			|	EXISTS IDENT:i FROM exp:e1 TO exp:e2
+            					STEP exp:e3 COMA cond:c 		{: RESULT = new AST("existsIntStep", new AST(i, e1, e2), new AST("step", e3, c)); :}	%prec FORALL
+
+            ;
 
 forAllExp	::= FORALL IDENT:i COMA boolexp:b       {: RESULT = new AST("forall", new AST(i, null, null), b); :}
             |	FORALL IDENT:i FROM exp:e1 TO exp:e2
@@ -152,6 +169,10 @@ cond		::=		exp:e1 IGUAL exp:e2					{: RESULT = new AST("igual", e1, e2); :}
 			|   cond:c1 IMPLICA cond:c2					{: RESULT = new AST("implica", c1, c2); :}
 			|	NOT cond:c								{: RESULT = new AST("not", c, null); :}   %prec NOT
 			|	AP cond:c CP							{: RESULT = c; :}
+			|   cond:c1 DIMPLICA cond:c2                {: RESULT = new AST("and", new AST("or", new AST("not", c1, null), c2),
+            			                                                new AST("or", new AST("not", c2, null), c1)); :}
+            |  existExp:e {: RESULT = e; :}
+
 			;
 listaEnteros::=	IDENT:i                             	{: RESULT = new AST("intIdent", null, new AST(i, null, null)); :}
 			|  IDENT:i COMA listaEnteros:l				{: RESULT = new AST("intIdent", l, new AST(i, null, null)); :}
@@ -179,6 +200,7 @@ listaReales	::=	IDENT:i                             	{: RESULT = new AST("floatI
 listaBool	::= IDENT:i									{: RESULT = new AST("boolIdent", null, new AST(i, null, null)); :}
 			|  IDENT:i COMA listaBool:l					{: RESULT = new AST("boolIdent", l, new AST(i, null, null)); :}
 			|  IDENT:i ASIG TRUE:t						{: RESULT = new AST("asigBool", new AST(i, null, null), new AST(t, null, null)); :}
+			|  IDENT:i ASIG exp:l					{: RESULT = new AST("asigBool", new AST(i, null, null), l); :} 
 			|  IDENT:i ASIG cond:c						{: RESULT = new AST("asigBool", new AST(i, null, null), c); :}
 			|  IDENT:i ASIG TRUE:t COMA listaBool:l		{: RESULT = new AST("asigBool", new AST(i, null, null), new AST(t, l, null)); :}
 			;

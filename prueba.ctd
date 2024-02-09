@@ -1,24 +1,47 @@
-   if (1 == p) goto L0;
-   goto L1;
+	x = 1;
+	if ( 1 == bx) goto L0;
+	goto L1;
 L1:
-   if (1 == p) goto L2;
-   goto L3;
-L0:
-   goto L3;
+	print 1;
+	if (x == 1) goto L3;
+	goto L4;
 L3:
-   $t0 = 1;
-L2:
-   x = $t0;
-   print x;
-   if (1 == p) goto L4;
-   goto L5;
+	bz = 1;
+	goto L5;
 L4:
-   if (1 == p) goto L6;
-   goto L7;
+	bz = 0;
 L5:
-   goto L6;
-L7:
-   $t1 = 1;
+	if ( 1 == bz) goto L6;
+	goto L7;
 L6:
-   x = $t1;
-   print x;
+	by = 1;
+	goto L8;
+L7:
+	by = 0;
+L8:
+	bx = by;
+	if ( 1 == bx) goto L9;
+	goto L10;
+L9:
+	print 2;
+	goto L11;
+L10:
+L11:
+	if ( 1 == by) goto L12;
+	goto L13;
+L12:
+	print 3;
+	goto L14;
+L13:
+L14:
+	if ( 1 == bz) goto L15;
+	goto L16;
+L15:
+	print 4;
+	goto L17;
+L16:
+L17:
+	goto L2;
+L0:
+L2:
+	print x;

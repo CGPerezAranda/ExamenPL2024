@@ -50,7 +50,9 @@ import java_cup.runtime.*;
     "(int)"             { return new Symbol(sym.CASTINT); }
     "(float)"           { return new Symbol(sym.CASTFLOAT); }
     ".length"           { return new Symbol(sym.LENGTH); }	
+       "<-->"           { return new Symbol(sym.DIMPLICA); }
     "-->"               { return new Symbol(sym.IMPLICA); }
+    "exists"            { return new Symbol(sym.EXISTS); }
     "true"|"false"      { return new Symbol(sym.TRUE, new String(yytext())); }
     "forall"            { return new Symbol(sym.FORALL); }
     "from"              { return new Symbol(sym.FROM); }
