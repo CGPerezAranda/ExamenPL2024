@@ -36,8 +36,8 @@ public class AST {
 				break;
 			case "printcond":
 				izq.gc();
-				et = Generador.getPastEtiqueta(); //et si se cumple la condición
-				et1 = Generador.getCurrentEtiqueta();	//et si no se cumple la condición
+				et = izq.v; //et si se cumple la condición
+				et1 = izq.f;	//et si no se cumple la condición
 				et2 = Generador.nuevaEtiqueta(); //et final y salida
 				PLXC.out.println(et + ":");//se cumple la condicion
 				PLXC.out.println("\twritec 116;\n\twritec 114;\n\twritec 117;\n\twritec 101;\n\twritec 10;");
